@@ -1,31 +1,28 @@
 package com.lirfu.physicssimulator;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import javax.swing.JFrame;
-
-public class Main extends JFrame {
+public final class Main extends JFrame {
 	private Simulator simulator;
 	
 	public static void main(String[] args) {
 		Main myFrame = new Main();
 		myFrame.setSize(1024, 600);
 		myFrame.setLocationRelativeTo(null);
-		myFrame.setDefaultCloseOperation(myFrame.EXIT_ON_CLOSE);
+		myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		myFrame.setVisible(true);
 	}
 	
-	public Main() {
+	private Main() {
 		simulator = new Simulator(600, 400);
 		add(simulator);
-		new Thread(terminal).start();
+		new Thread(this::terminalThread).start();
 	}
 	
-	private Runnable terminal = new Runnable() {
-		@Override
-		public void run() {
+	private void terminalThread() {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 			Engine_Command term = new Engine_Command(simulator);
 			
@@ -35,12 +32,12 @@ public class Main extends JFrame {
 				while (true) {
 					System.out.print("$> ");
 					String input = reader.readLine();
-					
+
 					System.out.println(term.process(input));
 				}
 			} catch (IOException e) {
 				System.out.println("Error opening input stream.");
 			}
 		}
-	};
+
 }
