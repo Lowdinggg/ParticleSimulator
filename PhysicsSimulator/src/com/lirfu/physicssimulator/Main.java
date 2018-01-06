@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public final class Main extends JFrame {
+public class Main extends JFrame {
 	private Simulator simulator;
 	
 	public static void main(String[] args) {
@@ -16,7 +16,7 @@ public final class Main extends JFrame {
 		myFrame.setVisible(true);
 	}
 	
-	private Main() {
+	public Main() {
 		simulator = new Simulator(600, 400);
 		add(simulator);
 		new Thread(this::terminalThread).start();

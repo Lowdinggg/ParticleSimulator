@@ -39,26 +39,22 @@ public class Simulator extends JPanel {
 		
 		particles = new LinkedList<>();
 		positionTray = new LinkedList<>();
-		
-//		particles.add(new Particle("Planet", 400, 400, new Vector(-13, 0), 1e5, 20));
-//		particles.add(new Particle("Sun", 400, 600, new Vector(0.2, 0), 1e15, 20));
-		
+
+
+
 		particles.add(new Particle("Nucleus 8+", 300, 300, new Vector(0, 0), 1e14, 10));
-		
+
 		particles.add(new Particle("Electron 1-", 100, 300, new Vector(0, 6), 1e8, 10));
 		particles.add(new Particle("Electron 1-", 500, 300, new Vector(0, -6), 1e8, 10));
 		particles.add(new Particle("Electron 1-", 300, 100, new Vector(-6, 0), 1e8, 10));
 		particles.add(new Particle("Electron 1-", 300, 500, new Vector(6, 0), 1e8, 10));
-		
+
 		particles.add(new Particle("Electron 1-", 150, 300, new Vector(0, 7), 1e8, 10));
 		particles.add(new Particle("Electron 1-", 450, 300, new Vector(0, -7), 1e8, 10));
 		particles.add(new Particle("Electron 1-", 300, 150, new Vector(-7, 0), 1e8, 10));
 		particles.add(new Particle("Electron 1-", 300, 450, new Vector(7, 0), 1e8, 10));
 		
 		addMouseMotionListener(new MouseMotionListener() {
-			@Override
-			public void mouseMoved(MouseEvent e) {
-			}
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -75,30 +71,33 @@ public class Simulator extends JPanel {
 					screenAnchor.add(screenCenter.relativeDistanceFrom(mousePosition)).multiplyValuesByFactor(0.9);
 				}
 			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+
+			}
 		});
 		
 		start();
 	}
 	
 	public void start() {
-		new Thread(new Runnable() {
-			public void run() {
-				while (true) {
+		new Thread(() -> {
+            while (true) {
 //					synchronized (context) {
-					calculateNextFrame();
+                calculateNextFrame();
 //					}
-					invalidate();
-					repaint();
-					try {
-						synchronized (context) {
-							context.wait(refreshTime);
-						}
-					} catch (InterruptedException e) {
-						System.out.println("Interrupted!");
-					}
-				}
-			}
-		}).start();
+                invalidate();
+                repaint();
+                try {
+                    synchronized (context) {
+                        context.wait(refreshTime);
+                    }
+                } catch (InterruptedException e) {
+                    System.out.println("Interrupted!");
+                }
+            }
+        }).start();
 	}
 	
 	@Override
@@ -127,7 +126,7 @@ public class Simulator extends JPanel {
 								(int) ((second.X - screenAnchor.X) * zoom), (int) ((second.Y - screenAnchor.Y) * zoom));
 						Position middle = first.middleFrom(second);
 						g.fillOval((int) ((middle.X - screenAnchor.X - 2) * zoom), (int) ((middle.Y - screenAnchor.Y - 2) * zoom), 4, 4);
-//						g.drawString(" " + first.distanceFrom(second), (int) (middle.X - screenAnchor.X), (int) (middle.Y - screenAnchor.Y));
+						//g.drawString(" " + first.distanceFrom(second), (int) (middle.X - screenAnchor.X), (int) (middle.Y - screenAnchor.Y));
 					}
 				}
 			
@@ -168,7 +167,7 @@ public class Simulator extends JPanel {
 							(int) ((endX - screenAnchor.X) * zoom), (int) ((endY - screenAnchor.Y) * zoom));
 				}
 			}
-			if (time <= 400) {
+			if (time <= 1000) {
 				g.setColor(Color.decode("#AABFFF"));
 				g.fillRect(getWidth() - 200, 0, 200, 30);
 				g.setColor(Color.decode("#000000"));
